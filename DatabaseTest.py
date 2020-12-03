@@ -2,6 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 from tkinter import *
 #CHANGE
+#CHANGE2
 def create_connection():
     global connection
     connection = None
