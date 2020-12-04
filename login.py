@@ -12,14 +12,14 @@ class loginFrame(tk.Frame):
 #     global password 
 #     frame.bg = COLOR_BLACK
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg="#666666", height=700, width=700)
         self.controller = controller
-        
+        self.background = COLOR_BLACK
 #         super(loginFrame, self).__init__()
         self.password = Entry(self)
        
 #         frame = tk.Frame(root, bg="black")
-        self.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
+#         self.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
         
         self.password.grid(row=0, column=1, pady=10)
         self.password.config(show='*')
@@ -27,8 +27,11 @@ class loginFrame(tk.Frame):
         password_label = Label(self, text="Enter MySQL Password: ")
         password_label.grid(row=0, column=0)
         
+        cancel_button = Button(self, text="Cancel", command=self.cancel)
+        cancel_button.grid(row=2, column=1, columnspan=2, padx=10)
         password_button = Button(self, text="Submit Password", command=self.create_connection)
         password_button.grid(row=2, column=0, columnspan=2)
+        
 #     def printer(self):
 #        print("{} {}".format(self.i, self.j))
        
@@ -49,7 +52,9 @@ class loginFrame(tk.Frame):
         except Error as e:
             print(f"The error '{e}' occurred")
             
-    
+    def cancel(self):
+        self.controller.show_frame("Index")
+        print("cancelling..")
 #         menu_options = ["Insert", "Update", "Delete", "Display"]
 #         selected = StringVar(frame)
 #         selected.set(menu_options[0])

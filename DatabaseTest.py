@@ -2,7 +2,6 @@ import mysql.connector
 import tkinter as tk
 import login
 from mysql.connector import Error
-
 from tkinter import *
 #CHANGE
 #CHANGE2
@@ -46,53 +45,22 @@ from tkinter import *
 
 
 
-# def execute_read_query(connection, query):
-#     cursor = connection.cursor()
-#     result = None
-#     try:
-#         cursor.execute(query)
-#         result = cursor.fetchall()
-#         return result
-#     except Error as e:
-#         print(f"The error '{e}' occurred")
-
-# def done(selected):
-#     print("Yay!")
-
-# global connection
-# root = Tk()
-# root.title("Test Database")
-# root.geometry("700x700")
-# 
-# password = Entry(root)
-# password.grid(row=0, column=1, pady=10)
-# password.config(show='*')
-# 
-# password_label = Label(root, text="Enter MySQL Password: ")
-# password_label.grid(row=0, column=0)
-# 
-# password_button = Button(root, text="Submit Password", command=create_connection)
-# password_button.grid(row=2, column=0, columnspan=2)
-
 class MainFrame(tk.Frame):
    
     def __init__(self, parent):
         self._connection = None
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg="#666666")
         container = tk.Frame(self)
-        container.place(relwidth = 1, relheight = 1)
-        container.pack()
-#         container.pack(side="top", fill="both", expand=True)
-#         container.grid_rowconfigure(0, weight=1)
-#         container.grid_columnconfigure(0, weight=1)
-            
+#         container.place(relwidth = 1, relheight = 1, relx=0, rely=.3)
+        container.pack(expand=True)
+        
         self.frames = {}
         for F in (Index, login.loginFrame, DUMMY):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
-            frame.width = 500;
-            frame.height = 500;
+
             self.frames[page_name] = frame
+            
             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame("Index")
         
@@ -131,16 +99,7 @@ class DUMMY(tk.Frame):
         
     def check_connection(self):
         print(self.controller.get_connection())
-# canvas = tk.Canvas(root, height=700, width=700, bg="#263D42")
-# canvas.place(relwidth=0.9, relheight=0.9, relx=0.1, rely=0.1)
-# canvas.pack()
 
-# root = tk.Tk()
-# root.title("Breath of the Mild")
-# 
-# mainPanel = login.login(root)
-# loginFrame = mainPanel.get_frame()
-# root.mainloop()
 root = tk.Tk()
 root.geometry("700x500")
 root.title("Breath of the Mild")
@@ -149,7 +108,8 @@ upperFrame = tk.Frame(root, background="#999999")
 upperFrame.place(relwidth=1, relheight=0.3)
 mainFrame = MainFrame(root)
 
-mainFrame.pack(pady=200)
+mainFrame.place(relwidth = 1, relheight = .7, relx=0, rely=.3)
+# mainFrame.pack(pady=200)
 # mainFrame.place(relx=.5, rely=.8)
 if __name__ == "__main__":
     root.mainloop()
