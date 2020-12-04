@@ -1,5 +1,6 @@
 import mysql.connector
 import tkinter as tk
+
 from mysql.connector import Error
 from tkinter import *
 from _curses import COLOR_BLACK
@@ -41,8 +42,10 @@ class loginFrame(tk.Frame):
                 passwd=self.password.get(),
                 database = "breathofthemild"
             )
+            self.controller.set_connection(connection)
+            self.controller.show_frame("DUMMY")
             output_msg = "Connection to MySQL DB successful"
-            print(connection)
+#             print(connection)
         except Error as e:
             print(f"The error '{e}' occurred")
             
@@ -71,5 +74,3 @@ class loginFrame(tk.Frame):
         
         
         
-# x = loginFrame()
-# x.printer()

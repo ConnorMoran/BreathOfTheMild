@@ -75,7 +75,9 @@ from tkinter import *
 # password_button.grid(row=2, column=0, columnspan=2)
 
 class MainFrame(tk.Frame):
+   
     def __init__(self, parent):
+        self._connection = None
         tk.Frame.__init__(self, parent)
         container = tk.Frame(self)
         container.place(relwidth = 1, relheight = 1)
@@ -85,7 +87,7 @@ class MainFrame(tk.Frame):
 #         container.grid_columnconfigure(0, weight=1)
             
         self.frames = {}
-        for F in (Index, login.loginFrame):
+        for F in (Index, login.loginFrame, DUMMY):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             frame.width = 500;
@@ -96,8 +98,15 @@ class MainFrame(tk.Frame):
         
     def show_frame(self, page_name):
         frame = self.frames[page_name]
+        if (page_name == "DUMMY"):
+            frame.check_connection()
         frame.tkraise()
-
+    
+    def set_connection(self, connection):
+        self._connection = connection
+        print(self._connection)
+    def get_connection(self):
+        return self._connection
 
 class Index(tk.Frame):
     def __init__(self, parent, controller):
@@ -108,6 +117,20 @@ class Index(tk.Frame):
         button = tk.Button(self, text="Admin Login",
                            command=lambda: controller.show_frame("loginFrame"))
         button.pack()
+        
+class DUMMY(tk.Frame):
+    #example: this is where password screen takes you
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = tk.Label(self, text="DUMMY")
+        label.pack(side="top", fill="x", pady=10)
+        button = tk.Button(self, text="Back Home",
+                           command=lambda: controller.show_frame("Index"))
+        button.pack()
+        
+    def check_connection(self):
+        print(self.controller.get_connection())
 # canvas = tk.Canvas(root, height=700, width=700, bg="#263D42")
 # canvas.place(relwidth=0.9, relheight=0.9, relx=0.1, rely=0.1)
 # canvas.pack()
