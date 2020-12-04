@@ -78,9 +78,11 @@ class MainFrame(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         container = tk.Frame(self)
-        container.pack(side="top", fill="both", expand=True)
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+        container.place(relwidth = 1, relheight = 1)
+        container.pack()
+#         container.pack(side="top", fill="both", expand=True)
+#         container.grid_rowconfigure(0, weight=1)
+#         container.grid_columnconfigure(0, weight=1)
             
         self.frames = {}
         for F in (Index, login.loginFrame):
@@ -117,10 +119,15 @@ class Index(tk.Frame):
 # loginFrame = mainPanel.get_frame()
 # root.mainloop()
 root = tk.Tk()
-upperFrame = tk.Frame(root, width=500, height = 200, background="#999999")
-upperFrame.place(relwidth=0.9, relheight=0.9, relx=0.1,rely=0.1)
+root.geometry("700x500")
+root.title("Breath of the Mild")
+
+upperFrame = tk.Frame(root, background="#999999")
+upperFrame.place(relwidth=1, relheight=0.3)
 mainFrame = MainFrame(root)
-mainFrame.place(relx=.5, rely=.5)
+
+mainFrame.pack(pady=200)
+# mainFrame.place(relx=.5, rely=.8)
 if __name__ == "__main__":
     root.mainloop()
 
