@@ -49,10 +49,10 @@ class MainFrame(tk.Frame):
    
     def __init__(self, parent):
         self._connection = None
-        tk.Frame.__init__(self, parent, bg="#666666")
+        tk.Frame.__init__(self, parent, bg="#666666", width=500, height=500)
         container = tk.Frame(self)
-#         container.place(relwidth = 1, relheight = 1, relx=0, rely=.3)
-        container.pack(expand=True)
+        container.place(relwidth = .98, relheight = .98, relx=.01, rely=.01)
+#         container.pack(expand=True)
         
         self.frames = {}
         for F in (Index, login.loginFrame, DUMMY):
@@ -60,8 +60,8 @@ class MainFrame(tk.Frame):
             frame = F(parent=container, controller=self)
 
             self.frames[page_name] = frame
-            
-            frame.grid(row=0, column=0, sticky="nsew")
+            frame.place(relwidth=1, relheight=1)
+#             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame("Index")
         
     def show_frame(self, page_name):
@@ -78,7 +78,7 @@ class MainFrame(tk.Frame):
 
 class Index(tk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, width=500, height=500)
         self.controller = controller
         label = tk.Label(self, text="BREATH OF THE MILD")
         label.pack(side="top", fill="x", pady=10)
@@ -89,8 +89,11 @@ class Index(tk.Frame):
 class DUMMY(tk.Frame):
     #example: this is where password screen takes you
     def __init__(self, parent, controller):
+        
         tk.Frame.__init__(self, parent)
         self.controller = controller
+        self._CONNECT = self.controller.get_connection()
+       
         label = tk.Label(self, text="DUMMY")
         label.pack(side="top", fill="x", pady=10)
         button = tk.Button(self, text="Back Home",
@@ -98,6 +101,7 @@ class DUMMY(tk.Frame):
         button.pack()
         
     def check_connection(self):
+        print(self._CONNECT)
         print(self.controller.get_connection())
 
 root = tk.Tk()
