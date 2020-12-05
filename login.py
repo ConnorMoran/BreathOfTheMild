@@ -12,47 +12,55 @@ class loginFrame(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="#323232")
-
+        
+        pl1 = Image.open("pwordLabel.png")
+        pl2 = pl1.resize((320,50), Image.ANTIALIAS)
+        self.pl = ImageTk.PhotoImage(pl2)
+        self.pLabel = Label(self, bg="#323232", image=self.pl)
+        self.pLabel.photo = self.pl
+        self.pLabel.place(relx=.3, rely=.08)
+        
+        
         wl1 = Image.open("IP.png")
-        wl2 = wl1.resize((163,25), Image.ANTIALIAS)
+        wl2 = wl1.resize((320,50), Image.ANTIALIAS)
         self.wrongLabel = ImageTk.PhotoImage(wl2)
-
         self.wrong_label = Label(self, bg="#323232", image=self.wrongLabel)
         self.wrong_label.photo = self.wrongLabel
-        self.wrong_label.grid(row=2, column=1)
-        
+        self.wrong_label.place(relx=.35, rely=.24)
+        self.wrong_label.place_forget()
         self.controller = controller
 
         self.password = Entry(self)
-        
-        self.password.grid(row=0, column=1, pady=10)
+        self.password.bind("<Key>", self.retype)
+        self.password.place(relx=.4, rely=.25)
         self.password.config(show='*')
-        
-        password_label = Label(self, bg="#666666", text="Enter MySQL Password: ")
-        password_label.grid(row=0, column=0)
-        
-        cancel_button = Button(self, text="Cancel", command=self.cancel)
-        cancel_button.grid(row=3, column=2, columnspan=2, padx=10)
-        
+               
         go_1 = Image.open("go.png")
         go_2 = go_1.resize((320,50), Image.ANTIALIAS)
         self.go_image = ImageTk.PhotoImage(go_2)
-        self.go_button = Button(self, bg="#323232", image=self.go_image, borderwidth=0, command=self.create_connection)
+        self.go_button = Button(self, image=self.go_image, borderwidth=0, command=self.create_connection)
         self.go_button.photo = self.go_image
         self.go_button.bind("<Enter>", self.go_enter)
         self.go_button.bind("<Leave>", self.go_exit)
-        self.go_button.grid(row=4, column=0)
+        self.go_button.place(relx=.05, rely=.72)
+        
+        c1 = Image.open("cancel.png")
+        c2 = c1.resize((320,50), Image.ANTIALIAS)
+        self.cancel_image = ImageTk.PhotoImage(c2)
+        self.cancel_button = Button(self, image=self.cancel_image, borderwidth=0, command=self.cancel)
+        self.cancel_button.photo = self.cancel_image
+        self.cancel_button.bind("<Enter>", self.c_enter)
+        self.cancel_button.bind("<Leave>", self.c_exit)
+        self.cancel_button.place(relx=.50, rely=.72)
         
         go_p1 = Image.open("go_push.png")
         go_p2 = go_p1.resize((320,50), Image.ANTIALIAS)
         self.go_pimage = ImageTk.PhotoImage(go_p2)
-
         
-        password_button = Button(self, text="Submit Password", command=self.create_connection)
-        password_button.grid(row=3, column=0, columnspan=2)
+        c_p1 = Image.open("cancelClick.png")
+        c_p2 = c_p1.resize((320,50), Image.ANTIALIAS)
+        self.c_pimage = ImageTk.PhotoImage(c_p2)
         
-#     def printer(self):
-#        print("{} {}".format(self.i, self.j))
        
     def create_connection(self):
         global connection
@@ -65,12 +73,14 @@ class loginFrame(tk.Frame):
                 passwd=self.password.get(),
                 database = "breathofthemild"
             )
+            self.password.delete()
             self.controller.set_connection(connection)
             self.controller.show_frame("DUMMY")
             output_msg = "Connection to MySQL DB successful"
             print (output_msg)
         except Error as e:
             print(f"The error '{e}' occurred")
+            self.wrong_label.place(relx=.3, rely=.36)
             
     def cancel(self):
         self.controller.show_frame("Index")
@@ -84,8 +94,17 @@ class loginFrame(tk.Frame):
         print("Exiting!")
         self.go_button.config(image=self.go_image)
         self.go_button.image = self.go_image
+    def c_enter(self, event):
+        print("entering!")
+        self.cancel_button.config(image=self.c_pimage)
+        self.cancel_button.image = self.c_pimage
+    def c_exit(self, event):
+        print("Exiting!")
+        self.cancel_button.config(image=self.cancel_image)
+        self.cancel_button.image = self.cancel_image
         
-
+    def retype(self, event):
+        self.wrong_label.place_forget()
     
     def execute_read_query(connection, query):
         cursor = connection.cursor()
