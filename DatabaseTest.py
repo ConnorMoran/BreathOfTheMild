@@ -1,6 +1,7 @@
 import mysql.connector
 import tkinter as tk
 import login
+import functions
 import PIL
 from PIL import ImageTk, Image
 from mysql.connector import Error
@@ -57,7 +58,7 @@ class MainFrame(tk.Frame):
 #         container.pack(expand=True)
         
         self.frames = {}
-        for F in (Index, login.loginFrame, DUMMY):
+        for F in (Index, login.loginFrame, DUMMY, functions.functionFrame):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
 
@@ -65,13 +66,16 @@ class MainFrame(tk.Frame):
             frame.place(relwidth=1, relheight=1)
 #             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame("Index")
-        
+        self.current_frame = self.frames["Index"]
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         if (page_name == "DUMMY"):
             frame.check_connection()
         frame.tkraise()
-    
+        self.current_frame = frame
+        print(self.current_frame)
+    def get_current_frame(self):
+        return self.current_frame
     def set_connection(self, connection):
         self._connection = connection
         print(self._connection)

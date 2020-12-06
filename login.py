@@ -5,6 +5,8 @@ from mysql.connector import Error
 from tkinter import *
 from PIL import ImageTk, Image
 
+import functions
+
 class loginFrame(tk.Frame):
      
     global connection
@@ -30,6 +32,8 @@ class loginFrame(tk.Frame):
 
         #text entry for typing password in
         self.password = Entry(self)
+        #delete later (my testing password
+        self.password.insert(INSERT, "x1!slydog39$^")
         self.password.bind("<Key>", self.retype)
         self.password.config(show='*')
                
@@ -76,7 +80,11 @@ class loginFrame(tk.Frame):
                 database = "breathofthemild"
             )
             self.controller.set_connection(connection)
-            self.scene_change("DUMMY")
+            self.scene_change("functionFrame")
+            #delete later
+            startPage = "Shop"
+            print (self.controller.get_current_frame())
+            self.controller.get_current_frame().set_page(startPage)
         except Error as e:
             self.wrong_label.place(relx=.5, rely=.41, anchor=CENTER)
             
