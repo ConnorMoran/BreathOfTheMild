@@ -1,6 +1,8 @@
 import mysql.connector
 import tkinter as tk
 import login
+import PIL
+from PIL import ImageTk, Image
 from mysql.connector import Error
 from tkinter import *
 #CHANGE
@@ -105,10 +107,19 @@ class DUMMY(tk.Frame):
         print(self.controller.get_connection())
 
 root = tk.Tk()
-root.geometry("700x500")
+root.geometry("700x500+500+300")
 root.title("Breath of the Mild")
 
 upperFrame = tk.Frame(root, background="#999999")
+
+logo = PIL.Image.open("logo.png")
+logo2 = logo.resize((700,180), PIL.Image.ANTIALIAS)
+logoImage = ImageTk.PhotoImage(logo2)
+logoLabel = Label(upperFrame, bg="#999999", image=logoImage)
+logoLabel.photo = logoImage
+logoLabel.place(relx=0, rely=0, relwidth=1, relheight=1)
+
+
 upperFrame.place(relwidth=1, relheight=0.3)
 mainFrame = MainFrame(root)
 
@@ -117,4 +128,22 @@ mainFrame.place(relwidth = 1, relheight = .7, relx=0, rely=.3)
 # mainFrame.place(relx=.5, rely=.8)
 if __name__ == "__main__":
     root.mainloop()
+    
+    
+    
+    
+#     def execute_read_query(connection, query):
+#         cursor = connection.cursor()
+#         result = None
+#         try:
+#             cursor.execute(query)
+#             result = cursor.fetchall()
+#             return result
+#         except Error as e:
+#             print(f"The error '{e}' occurred")
 
+#         menu_options = ["Insert", "Update", "Delete", "Display"]
+#         selected = StringVar(frame)
+#         selected.set(menu_options[0])
+#         menu = OptionMenu(frame, selected, *menu_options, command=done)
+#         menu.grid(row=0, column=0, pady=10)
