@@ -53,33 +53,105 @@ class functionFrame(tk.Frame):
             self.location_protocol()
         elif self.page == self.page_list[8]:
             self.NPC_dialogue_protocol()
-        elif self.page == self.page_list[9]:
-            self.mob_protocol()
         elif self.page == self.page_list[10]:
+            self.mob_protocol()
+        elif self.page == self.page_list[9]:
             self.NPC_protocol()
         
-    def server_protocol(self):
-        test = tk.Button(self, text="server option", command=self.testCommand)
-        self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
+
+        
 #         print("End server_protocol")
+    def characters_in_given_server(self):
+        _msg = self.execute_read_query(self.controller.get_connection(), "SELECT charactername, ServerID FROM playercharacter WHERE ServerID = 1;")
+        tempList = []
+        for m in _msg:
+            tempList.append(m[0])
+        for mn in tempList:
+            self.add_text(mn)
+        self.add_text("------------------------------------------------------") 
+    def mobs_in_location(self):
+        _msg = self.execute_read_query(self.controller.get_connection(), "Select mobid, type From mob Where locationID=01 ORDER BY type")
+        tempList = []
+        for m in _msg:
+            tempList.append(m)
+        for mn in tempList:
+            self.add_text(str(mn[0]) + str(mn[1]))
+        self.add_text("------------------------------------------------------") 
+    #error
+    def shop_items(self):
+        _msg = self.execute_read_query(self.controller.get_connection(), "SELECT Shop, Shopid From Shops Where shopid= 001")
+        tempList = []
+        for m in _msg:
+            tempList.append(m)
+        for mn in tempList:
+            self.add_text(mn[0] + mn[1]) 
+        self.add_text("------------------------------------------------------") 
+    def npc_dialogue(self):
+        _msg = self.execute_read_query(self.controller.get_connection(), "Select dialogue From Npcdialogue Where npcid = 01")
+        tempList = []
+        for m in _msg:
+            tempList.append(m)
+        for mn in tempList:
+            self.add_text(mn[0]) 
+        self.add_text("------------------------------------------------------") 
+    def locations_in_a_server(self):
+        _msg = self.execute_read_query(self.controller.get_connection(), "Select locationid From location Where serverid = 01")
+        tempList = []
+        for m in _msg:
+            tempList.append(m)
+        for mn in tempList:
+            self.add_text(mn[0])         
+        self.add_text("------------------------------------------------------") 
+    def display_characters_items(self):
+        _msg = self.execute_read_query(self.controller.get_connection(), "select ItemName from item where CharacterName = 'George';")
+        tempList = []
+        for m in _msg:
+            tempList.append(m)
+        for mn in tempList:
+            self.add_text(mn[0]) 
+        self.add_text("------------------------------------------------------") 
+    def characters_player_made(self):
+        _msg = self.execute_read_query(self.controller.get_connection(), "SELECT characterName, Level From PlayerCharacter Where AccountName = ‘DoodleMan’;")
+        tempList = []
+        for m in _msg:
+            tempList.append(m)
+        for mn in tempList:
+            self.add_text(str(mn[0]) + " " + str(mn[1])) 
+        self.add_text("------------------------------------------------------")        
+        
+    def server_protocol(self):
+        test = tk.Button(self, text="characters in a given server", command=self.characters_in_given_server)
+        self.currentButtons.append(test)
+        test.place(relx=0, rely = .1)
+        
+        _locations = tk.Button(self, text="locations in given server", command=self.locations_in_a_server)
+        self.currentButtons.append(_locations)
+        _locations.place(relx=0, rely = .3)
     def testCommand(self):
-        _msg = "you selected the test command"
-        self.add_text(_msg)
-       
+        self.add_text("test")
+        self.add_text("------------------------------------------------------") 
     def dwells_in_protocol(self):
         test = tk.Button(self, text="dwells option", command=self.testCommand)
         self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
+        test.place(relx=0, rely = .1)
 #         print("End server_protocol")
     def player_account_protocol(self):
         test = tk.Button(self, text="p_account option", command=self.testCommand)
         self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
+        test.place(relx=0, rely = .1)
+        
+        characters = tk.Button(self, text="all characters from given player", command=self.characters_player_made)
+        self.currentButtons.append(characters)
+        characters.place(relx=0, rely = .2)
     def shop_protocol(self):
         test = tk.Button(self, text="shop option", command=self.testCommand)
         self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
+        test.place(relx=0, rely = .1)
+        
+        inventory = tk.Button(self, text="display inventory", command=self.shop_items)
+        self.currentButtons.append(inventory)
+        inventory.place(relx=0, rely = .2)
+                
     def NPC_quest_protocol(self):
         test = tk.Button(self, text="npc quest option", command=self.testCommand)
         self.currentButtons.append(test)
@@ -87,7 +159,11 @@ class functionFrame(tk.Frame):
     def player_character_protocol(self):
         test = tk.Button(self, text="character option", command=self.testCommand)
         self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
+        test.place(relx=0, rely = .1)
+        
+        inventory = tk.Button(self, text="character inventory", command=self.display_characters_items)
+        self.currentButtons.append(inventory)
+        inventory.place(relx=0, rely = .2)
     def item_protocol(self):
         test = tk.Button(self, text="item option", command=self.testCommand)
         self.currentButtons.append(test)
@@ -96,10 +172,18 @@ class functionFrame(tk.Frame):
         test = tk.Button(self, text="location option", command=self.testCommand)
         self.currentButtons.append(test)
         test.place(relx=.1, rely = .1)
+        
+        mobs = tk.Button(self, text="get all mobs in location: 1", command=self.mobs_in_location)
+        self.currentButtons.append(mobs)
+        mobs.place(relx=0, rely = .2)
     def NPC_dialogue_protocol(self):
         test = tk.Button(self, text="npc dialogue option", command=self.testCommand)
         self.currentButtons.append(test)
         test.place(relx=.1, rely = .1)
+        
+        dialogue = tk.Button(self, text="display NPC dialogue", command=self.npc_dialogue)
+        self.currentButtons.append(dialogue)
+        dialogue.place(relx=0, rely = .2)
     def mob_protocol(self):
         test = tk.Button(self, text="mob option", command=self.testCommand)
         self.currentButtons.append(test)
@@ -110,10 +194,20 @@ class functionFrame(tk.Frame):
         test.place(relx=.1, rely = .1)
         
         
+        
     def add_text(self, _text):
-        self.text.insert(INSERT, "\n\n" + _text)
+        self.text.insert(INSERT, "\n\n" + str(_text))
         self.text.yview_moveto('1')
     
     def retreat(self):
-        self.controller.show_frame("DUMMY")
+        self.controller.show_frame("DatabaseEditFrame")
         
+    def execute_read_query(self, connection, query):
+        cursor = connection.cursor()
+        result = None
+        try:
+            cursor.execute(query)
+            result = cursor.fetchall()
+            return result
+        except Error as e:
+            print(f"The error '{e}' occurred")

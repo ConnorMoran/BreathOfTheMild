@@ -2,6 +2,8 @@ import mysql.connector
 import tkinter as tk
 import login
 import functions
+import DatabaseEdit
+import DatabaseSelection
 import PIL
 from PIL import ImageTk, Image
 from mysql.connector import Error
@@ -58,19 +60,22 @@ class MainFrame(tk.Frame):
 #         container.pack(expand=True)
         
         self.frames = {}
-        for F in (Index, login.loginFrame, DUMMY, functions.functionFrame):
+        for F in (Index, login.loginFrame, DUMMY, functions.functionFrame, DatabaseEdit.DatabaseEditFrame, DatabaseSelection.DatabaseSelectionFrame):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
 
             self.frames[page_name] = frame
             frame.place(relwidth=1, relheight=1)
-#             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame("Index")
         self.current_frame = self.frames["Index"]
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         if (page_name == "DUMMY"):
             frame.check_connection()
+        if page_name == "DatabaseEditFrame":
+            frame.create_table()
+        if page_name == "DatabaseSelectionFrame":
+            frame.create_buttons()
         frame.tkraise()
         self.current_frame = frame
         print(self.current_frame)
@@ -81,6 +86,13 @@ class MainFrame(tk.Frame):
         print(self._connection)
     def get_connection(self):
         return self._connection
+    def set_current_table(self, table_name):
+        self._current_table = table_name
+
+    def get_current_table(self):
+        return self._current_table
+    def get_function_Frame(self):
+        return self.frames["functionFrame"]
 
 class Index(tk.Frame):
     def __init__(self, parent, controller):

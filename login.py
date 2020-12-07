@@ -80,11 +80,11 @@ class loginFrame(tk.Frame):
                 database = "breathofthemild"
             )
             self.controller.set_connection(connection)
-            self.scene_change("functionFrame")
+            self.scene_change("DatabaseSelectionFrame")
             #delete later
             startPage = "Shop"
             print (self.controller.get_current_frame())
-            self.controller.get_current_frame().set_page(startPage)
+
         except Error as e:
             self.wrong_label.place(relx=.5, rely=.41, anchor=CENTER)
             
