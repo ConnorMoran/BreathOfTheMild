@@ -5,10 +5,12 @@ from mysql.connector import Error
 from tkinter import *
 from PIL import ImageTk, Image
 from asyncio.base_events import Server
+import tkinter.simpledialog as simpledialog
+from tkinter import messagebox
 
 class functionFrame(tk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, bg="#999999")
+        tk.Frame.__init__(self, parent, bg="#323232")
         self.controller = controller
         self.currentButtons = []
         self.page_list = ["Server", "DwellsIn", "PlayerAccount", "Shop", "NPCQuest", "PlayerCharacter", "Item", "Location", "NPCDialogue", "NPC", "Mob"]
@@ -58,25 +60,67 @@ class functionFrame(tk.Frame):
         elif self.page == self.page_list[9]:
             self.NPC_protocol()
         
-
+    def helper(self, query):
+            _msg = self.execute_read_query(self.controller.get_connection(), query)
+            tempList = []
+            for m in _msg:
+                tempList.append(m)
+            if tempList.__len__() == 0:
+                raise ValueError
+            return tempList
         
-#         print("End server_protocol")
     def characters_in_given_server(self):
-        _msg = self.execute_read_query(self.controller.get_connection(), "SELECT charactername, ServerID FROM playercharacter WHERE ServerID = 1;")
-        tempList = []
-        for m in _msg:
-            tempList.append(m[0])
-        for mn in tempList:
-            self.add_text(mn)
-        self.add_text("------------------------------------------------------") 
+        try:
+            input = simpledialog.askstring("Server Input", "type a server ID")
+            if input==None:
+                return
+            query = "SELECT charactername, ServerID FROM playercharacter WHERE ServerID = " + input + ";"
+            test_list = self.helper(query)             
+            self.add_text("_____Characters in Server: " + str(input))
+            for mn in test_list:
+                self.add_text(" -Character: " + str(mn[0]) + " --- Server: " + str(mn[1]))
+            self.add_text("------------------------------------------------------") 
+        except ValueError:
+            messagebox.showerror("404", "no data matches your query..")
+            self.characters_in_given_server()
+        except:
+            messagebox.showerror("Error", "Invalid Server ID")
+            self.characters_in_given_server()
+            
+    def characters_at_location(self):
+        try:
+            input = simpledialog.askstring("Location Input", "type a location ID")
+            if input==None:
+                return
+            query = "SELECT charactername From PlayerCharacter Where locationID=" + input + ";"
+            self.add_text("_____Characters in Location: " + str(input))
+            for mn in self.helper(query):
+                self.add_text(str(" -Character: " + mn[0]))
+            self.add_text("------------------------------------------------------") 
+        except ValueError:
+            messagebox.showerror("404", "no data matches your query..")
+            self.characters_at_location()
+        except:
+            messagebox.showerror("Error", "Invalid location ID")
+            self.characters_at_location()
+            
     def mobs_in_location(self):
-        _msg = self.execute_read_query(self.controller.get_connection(), "Select mobid, type From mob Where locationID=01 ORDER BY type")
-        tempList = []
-        for m in _msg:
-            tempList.append(m)
-        for mn in tempList:
-            self.add_text(str(mn[0]) + str(mn[1]))
-        self.add_text("------------------------------------------------------") 
+        try:
+            input = simpledialog.askstring("Location Input", "type a location ID")
+            if input==None:
+                return
+            query = "select mobid,type From mob Where locationID=" + input + " ORDER BY type;"
+            self.add_text("_____Mobs in Location: " + str(input))
+            for mn in self.helper(query):
+                self.add_text(" -Mob ID: " + str(mn[0]) + " --- Mob Type: " + str(mn[1]))
+            self.add_text("------------------------------------------------------") 
+        except ValueError:
+            messagebox.showerror("404", "no data matches your query..")
+            self.mobs_in_location()
+        except Error as e:
+            messagebox.showerror("Error", "Invalid location ID")
+            self.mobs_in_location()
+            
     #error
     def shop_items(self):
         _msg = self.execute_read_query(self.controller.get_connection(), "SELECT Shop, Shopid From Shops Where shopid= 001")
@@ -86,113 +130,249 @@ class functionFrame(tk.Frame):
         for mn in tempList:
             self.add_text(mn[0] + mn[1]) 
         self.add_text("------------------------------------------------------") 
-    def npc_dialogue(self):
-        _msg = self.execute_read_query(self.controller.get_connection(), "Select dialogue From Npcdialogue Where npcid = 01")
-        tempList = []
-        for m in _msg:
-            tempList.append(m)
-        for mn in tempList:
-            self.add_text(mn[0]) 
-        self.add_text("------------------------------------------------------") 
-    def locations_in_a_server(self):
-        _msg = self.execute_read_query(self.controller.get_connection(), "Select locationid From location Where serverid = 01")
-        tempList = []
-        for m in _msg:
-            tempList.append(m)
-        for mn in tempList:
-            self.add_text(mn[0])         
-        self.add_text("------------------------------------------------------") 
-    def display_characters_items(self):
-        _msg = self.execute_read_query(self.controller.get_connection(), "select ItemName from item where CharacterName = 'George';")
-        tempList = []
-        for m in _msg:
-            tempList.append(m)
-        for mn in tempList:
-            self.add_text(mn[0]) 
-        self.add_text("------------------------------------------------------") 
-    def characters_player_made(self):
-        _msg = self.execute_read_query(self.controller.get_connection(), "SELECT characterName, Level From PlayerCharacter Where AccountName = ‘DoodleMan’;")
-        tempList = []
-        for m in _msg:
-            tempList.append(m)
-        for mn in tempList:
-            self.add_text(str(mn[0]) + " " + str(mn[1])) 
-        self.add_text("------------------------------------------------------")        
         
+    def npc_dialogue(self):
+        try:
+            input = simpledialog.askstring("NPC Input", "type an NPC ID")
+            if input==None:
+                return
+            query = "Select dialogue From Npcdialogue Where npcid =" + input + ";"
+            self.add_text("_____Dialogue from NPC: " + str(input))
+            for mn in self.helper(query):
+                self.add_text(" -Dialogue Option: " + str(mn))
+            self.add_text("------------------------------------------------------") 
+        except ValueError:
+            messagebox.showerror("404", "no data matches your query..")
+            self.npc_dialogue()
+        except Error as e:
+            messagebox.showerror("Error", "Invalid NPCID")
+            self.npc_dialogue()
+            
+    def locations_in_a_server(self):
+        try:
+            input = simpledialog.askstring("Server Input", "type a Server ID")
+            if input==None:
+                return
+            query = "Select locationid, LocationName From location Where serverid = " + input + ";"
+            self.add_text("_____Locations in Server: " + str(input))
+            for mn in self.helper(query):
+                self.add_text(" -Location: " + str(mn[1]) + " --- ID: " + str(mn[0]))
+            self.add_text("------------------------------------------------------") 
+        except ValueError:
+            messagebox.showerror("404", "no data matches your query..")
+            self.locations_in_a_server()
+        except Error as e:
+            messagebox.showerror("Error", "Invalid server ID")
+            self.locations_in_a_server()
+            
+    def display_characters_items(self):
+        
+        try:
+            input = simpledialog.askstring("Character Input", "type a Character Name")
+            if input==None:
+                return
+            query = "select ItemName from item where CharacterName = '" + input + "';"
+            self.add_text("_____Items in Inventory: " + str(input))
+            for mn in self.helper(query):
+                self.add_text(" -Item: " + str(mn))
+            self.add_text("------------------------------------------------------")
+        except ValueError:
+            messagebox.showerror("404", "no data matches your query..")
+            self.display_characters_items() 
+        except Error as e:
+            messagebox.showerror("Error", "Invalid Character Name")
+            self.display_characters_items()
+            
+    def characters_player_made(self):
+        try:
+            input = simpledialog.askstring("Account Input", "type an account name")
+            if input==None:
+                return
+            query = "select characterName,Level FROM PlayerCharacter WHERE AccountName='" + input + "';"
+            self.add_text("_____characters " + str(input) + " has made: ")
+            for mn in self.helper(query):
+                self.add_text(str(" -Name: " + mn[0]) + " --- Level: " + str(mn[1]))
+            self.add_text("------------------------------------------------------")
+        except ValueError:
+            messagebox.showerror("404", "no data matches your query..")
+            self.characters_player_made() 
+        except Error as e:
+            messagebox.showerror("Error", "Invalid Character Name")
+            self.characters_player_made()
+            
+    def servers_location_in(self):   
+        _msg = self.execute_read_query(self.controller.get_connection(), "Select serverid,LocationName From location;")
+        tempList = []
+        self.add_text("_____list Servers/locations")
+        for m in _msg:
+            tempList.append(m)
+        for mn in tempList:
+            self.add_text(str(" -Server: " + str(mn[0])) + " Location: " + str(mn[1])) 
+        self.add_text("------------------------------------------------------") 
+    
+    def testCommand(self):
+        self.add_text("test")
+        self.add_text("------------------------------------------------------") 
+        
+    #below are the protocols for placing and setting the buttons and their behavior on
+    #the left pane of the function screen. One protocol is called depending on the 
+    #what the current Table is.
+    
+    #2 complete buttons -----UF
     def server_protocol(self):
-        test = tk.Button(self, text="characters in a given server", command=self.characters_in_given_server)
+        test = tk.Button(self, text="place Holder", command=self.testCommand)
         self.currentButtons.append(test)
         test.place(relx=0, rely = .1)
+        
+        test2 = tk.Button(self, text="characters in a given server", command=self.characters_in_given_server)
+        self.currentButtons.append(test2)
+        test2.place(relx=0, rely = .2)
         
         _locations = tk.Button(self, text="locations in given server", command=self.locations_in_a_server)
         self.currentButtons.append(_locations)
         _locations.place(relx=0, rely = .3)
-    def testCommand(self):
-        self.add_text("test")
-        self.add_text("------------------------------------------------------") 
+        
+    #0 complete buttons -----UF
     def dwells_in_protocol(self):
         test = tk.Button(self, text="dwells option", command=self.testCommand)
         self.currentButtons.append(test)
         test.place(relx=0, rely = .1)
-#         print("End server_protocol")
+        
+        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test2)
+        test2.place(relx=0, rely = .2)
+        
+        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test3)
+        test3.place(relx=0, rely = .3)
+    
+    #1 complete button -----UF
     def player_account_protocol(self):
-        test = tk.Button(self, text="p_account option", command=self.testCommand)
+        test = tk.Button(self, text="place Holder", command=self.testCommand)
         self.currentButtons.append(test)
         test.place(relx=0, rely = .1)
         
         characters = tk.Button(self, text="all characters from given player", command=self.characters_player_made)
         self.currentButtons.append(characters)
         characters.place(relx=0, rely = .2)
+        
+        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test3)
+        test3.place(relx=0, rely = .3)
+        
+    #0 complete buttons -----UF
     def shop_protocol(self):
-        test = tk.Button(self, text="shop option", command=self.testCommand)
+        test = tk.Button(self, text="place Holder", command=self.testCommand)
         self.currentButtons.append(test)
         test.place(relx=0, rely = .1)
         
         inventory = tk.Button(self, text="display inventory", command=self.shop_items)
         self.currentButtons.append(inventory)
         inventory.place(relx=0, rely = .2)
+        
+        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test3)
+        test3.place(relx=0, rely = .3)
                 
+    #0 complete buttons -----UF
     def NPC_quest_protocol(self):
         test = tk.Button(self, text="npc quest option", command=self.testCommand)
         self.currentButtons.append(test)
         test.place(relx=.1, rely = .1)
+        
+        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test2)
+        test2.place(relx=0, rely = .2)
+        
+        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test3)
+        test3.place(relx=0, rely = .3)
+        
+    #1 complete button -----UF
     def player_character_protocol(self):
-        test = tk.Button(self, text="character option", command=self.testCommand)
+        test = tk.Button(self, text="place Holder", command=self.testCommand)
         self.currentButtons.append(test)
         test.place(relx=0, rely = .1)
         
+        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test2)
+        test2.place(relx=0, rely = .2)
+        
         inventory = tk.Button(self, text="character inventory", command=self.display_characters_items)
         self.currentButtons.append(inventory)
-        inventory.place(relx=0, rely = .2)
-    def item_protocol(self):
-        test = tk.Button(self, text="item option", command=self.testCommand)
-        self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
-    def location_protocol(self):
-        test = tk.Button(self, text="location option", command=self.testCommand)
-        self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
+        inventory.place(relx=0, rely = .3)
         
-        mobs = tk.Button(self, text="get all mobs in location: 1", command=self.mobs_in_location)
+    #0 complete buttons -----UF
+    def item_protocol(self):
+        test = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test)
+        test.place(relx=0, rely = .1)
+        
+        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test2)
+        test2.place(relx=0, rely = .2)
+        
+        test3 = tk.Button(self, text="item option", command=self.testCommand)
+        self.currentButtons.append(test3)
+        test3.place(relx=.1, rely = .3)
+        
+    #3 complete buttons -----GOOD
+    def location_protocol(self):
+        mobs = tk.Button(self, text="all mobs in location", command=self.mobs_in_location)
         self.currentButtons.append(mobs)
-        mobs.place(relx=0, rely = .2)
+        mobs.place(relx=0, rely = .1)
+        
+        servs = tk.Button(self, text="all servers a location is in", command=self.servers_location_in)
+        self.currentButtons.append(servs)
+        servs.place(relx=0, rely = .2)
+        
+        chars = tk.Button(self, text="Characters at location", command=self.characters_at_location)
+        self.currentButtons.append(chars)
+        chars.place(relx=0, rely = .3)
+    
+    #1 complete button -----UF
     def NPC_dialogue_protocol(self):
         test = tk.Button(self, text="npc dialogue option", command=self.testCommand)
         self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
+        test.place(relx=0, rely = .1)
         
         dialogue = tk.Button(self, text="display NPC dialogue", command=self.npc_dialogue)
         self.currentButtons.append(dialogue)
         dialogue.place(relx=0, rely = .2)
+        
+        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test3)
+        test3.place(relx=0, rely = .3)
+        
+    #0 complete buttons -----UF
     def mob_protocol(self):
         test = tk.Button(self, text="mob option", command=self.testCommand)
         self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
+        test.place(relx=0, rely = .1)
+        
+        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test2)
+        test2.place(relx=0, rely = .2)
+        
+        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test3)
+        test3.place(relx=0, rely = .3)
+        
+    #0 complete buttons -----UF
     def NPC_protocol(self):
         test = tk.Button(self, text="NPC option", command=self.testCommand)
         self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
+        test.place(relx=0, rely = .1)
         
+        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test2)
+        test2.place(relx=0, rely = .2)
+        
+        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
+        self.currentButtons.append(test3)
+        test3.place(relx=0, rely = .3)
+        
+    #END LEFT PANE BUTTON PROTOCOLS--------------------------------------------
         
         
     def add_text(self, _text):

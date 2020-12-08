@@ -1,6 +1,7 @@
 import mysql.connector
 import tkinter as tk
 import login
+import Index
 import functions
 import DatabaseEdit
 import DatabaseSelection
@@ -10,46 +11,6 @@ from mysql.connector import Error
 from tkinter import *
 #CHANGE
 #CHANGE2
-# def create_connection():
-#     global connection
-#     connection = None
-#     try:
-#         connection = mysql.connector.connect(
-#             host="localhost",
-#             user="root",
-#             passwd=password.get(),
-#             database = "breathofthemild"
-#         )
-#         output_msg = "Connection to MySQL DB successful"
-#     except Error as e:
-#         print(f"The error '{e}' occurred")
-#         root.destroy()
-# 
-#     password.destroy()
-#     password_label.destroy()
-#     password_button.destroy()
-# 
-#     menu_options = ["Insert", "Update", "Delete", "Display"]
-#     selected = StringVar(root)
-#     selected.set(menu_options[0])
-#     menu = OptionMenu(root, selected, *menu_options, command=done)
-#     menu.grid(row=0, column=0, pady=10)
-
-    # location_fields = execute_read_query(connection, "SHOW COLUMNS FROM location")
-    # for i in range(len(location_fields)):
-    #     entry = Label(root, text=str(location_fields[i][0]))
-    #     entry.grid(row=0, column=i)
-    #
-    # locations_table = execute_read_query(connection, "Select * from location")
-    # table_contents = []
-    # for i in range(len(locations_table)):
-    #     for j in range(len(locations_table[i])):
-    #         entry = Label(root, text=str(locations_table[i][j]))
-    #         entry.grid(row=i+1, column=j)
-    #         table_contents.append(entry)
-
-
-
 class MainFrame(tk.Frame):
    
     def __init__(self, parent):
@@ -60,14 +21,14 @@ class MainFrame(tk.Frame):
 #         container.pack(expand=True)
         
         self.frames = {}
-        for F in (Index, login.loginFrame, DUMMY, functions.functionFrame, DatabaseEdit.DatabaseEditFrame, DatabaseSelection.DatabaseSelectionFrame):
+        for F in (Index.IndexFrame, login.loginFrame, DUMMY, functions.functionFrame, DatabaseEdit.DatabaseEditFrame, DatabaseSelection.DatabaseSelectionFrame):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
 
             self.frames[page_name] = frame
             frame.place(relwidth=1, relheight=1)
-        self.show_frame("Index")
-        self.current_frame = self.frames["Index"]
+        self.show_frame("IndexFrame")
+        self.current_frame = self.frames["IndexFrame"]
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         if (page_name == "DUMMY"):
@@ -94,15 +55,15 @@ class MainFrame(tk.Frame):
     def get_function_Frame(self):
         return self.frames["functionFrame"]
 
-class Index(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, width=500, height=500)
-        self.controller = controller
-        label = tk.Label(self, text="BREATH OF THE MILD")
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Admin Login",
-                           command=lambda: controller.show_frame("loginFrame"))
-        button.pack()
+# class Index(tk.Frame):
+#     def __init__(self, parent, controller):
+#         tk.Frame.__init__(self, parent, width=500, height=500)
+#         self.controller = controller
+#         label = tk.Label(self, text="BREATH OF THE MILD")
+#         label.pack(side="top", fill="x", pady=10)
+#         button = tk.Button(self, text="Admin Login",
+#                            command=lambda: controller.show_frame("loginFrame"))
+#         button.pack()
         
 class DUMMY(tk.Frame):
     #example: this is where password screen takes you
@@ -124,6 +85,7 @@ class DUMMY(tk.Frame):
 
 root = tk.Tk()
 root.geometry("700x500+500+300")
+root.resizable(0, 0)
 root.title("Breath of the Mild")
 
 upperFrame = tk.Frame(root, background="#999999")

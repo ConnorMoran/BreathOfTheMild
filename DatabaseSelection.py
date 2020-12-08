@@ -9,7 +9,7 @@ from functools import partial
 class DatabaseSelectionFrame(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg="#323232")
         self.controller = controller
         self.tables = []
 #         self.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)

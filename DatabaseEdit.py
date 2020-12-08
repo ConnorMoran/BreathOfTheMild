@@ -9,7 +9,7 @@ from functools import partial
 class DatabaseEditFrame(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg="#323232")
         self.controller = controller
         self.current_table = None
         self.table = []

@@ -4,7 +4,6 @@ import PIL
 from mysql.connector import Error
 from tkinter import *
 from PIL import ImageTk, Image
-
 import functions
 
 class loginFrame(tk.Frame):
@@ -32,12 +31,12 @@ class loginFrame(tk.Frame):
 
         #text entry for typing password in
         self.password = Entry(self)
-        #delete later (my testing password
-        self.password.insert(INSERT, "x1!slydog39$^")
         self.password.bind("<Key>", self.retype)
         self.password.config(show='*')
+        
+
                
-        #try to log-in button, takes you to [DUMMY]
+        #try to log-in button, takes you to [DatabaseSelection]
         go_1 = Image.open("go.png")
         go_2 = go_1.resize((320,50), Image.ANTIALIAS)
         self.go_image = ImageTk.PhotoImage(go_2)
@@ -68,6 +67,7 @@ class loginFrame(tk.Frame):
         self.c_pimage = ImageTk.PhotoImage(c_p2)
         
         self.init_state()
+        
     #try to establish a connection given password
     def create_connection(self):
         global connection
@@ -89,24 +89,24 @@ class loginFrame(tk.Frame):
             self.wrong_label.place(relx=.5, rely=.41, anchor=CENTER)
             
     def cancel(self):
-        self.scene_change("Index")
+        self.scene_change("IndexFrame")
         
     def go_enter(self, event):
         print("entering!")
         self.go_button.config(image=self.go_pimage)
-#         self.go_button.image = self.go_pimage
+        
+        #For testing purposes only, delete LATER
+        _skip = tk.Button(self, "skip", command=self.code_test_Skip_password())
+        _skip.place(relx=0, rely=1)
     def go_exit(self, event):
         print("Exiting!")
         self.go_button.config(image=self.go_image)
-#         self.go_button.image = self.go_image
     def c_enter(self, event):
         print("entering!")
         self.cancel_button.config(image=self.c_pimage)
-#         self.cancel_button.image = self.c_pimage
     def c_exit(self, event):
         print("Exiting!")
         self.cancel_button.config(image=self.cancel_image)
-#         self.cancel_button.image = self.cancel_image
         
     def retype(self, event):
         self.wrong_label.place_forget()
@@ -130,4 +130,8 @@ class loginFrame(tk.Frame):
         self.go_button.place(relx=.5, rely=.6, anchor=CENTER)
         self.cancel_button.place(relx=.5, rely=.93, anchor=CENTER)
         self.password.delete(0, END)
+        
+        
+    def code_test_Skip_password(self, ):
+        self.password.insert(0, "x1!slydog39$^")
                 
