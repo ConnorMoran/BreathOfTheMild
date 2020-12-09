@@ -54,16 +54,6 @@ class MainFrame(tk.Frame):
         return self._current_table
     def get_function_Frame(self):
         return self.frames["functionFrame"]
-
-# class Index(tk.Frame):
-#     def __init__(self, parent, controller):
-#         tk.Frame.__init__(self, parent, width=500, height=500)
-#         self.controller = controller
-#         label = tk.Label(self, text="BREATH OF THE MILD")
-#         label.pack(side="top", fill="x", pady=10)
-#         button = tk.Button(self, text="Admin Login",
-#                            command=lambda: controller.show_frame("loginFrame"))
-#         button.pack()
         
 class DUMMY(tk.Frame):
     #example: this is where password screen takes you
@@ -87,7 +77,8 @@ root = tk.Tk()
 root.geometry("700x500+500+300")
 root.resizable(0, 0)
 root.title("Breath of the Mild")
-
+# root.wm_attributes("-transparentcolor",'#333333')
+# root.wm_attributes("-transparentcolor", 'grey')
 upperFrame = tk.Frame(root, background="#999999")
 
 logo = PIL.Image.open("logo.png")
@@ -102,8 +93,6 @@ upperFrame.place(relwidth=1, relheight=0.3)
 mainFrame = MainFrame(root)
 
 mainFrame.place(relwidth = 1, relheight = .7, relx=0, rely=.3)
-# mainFrame.pack(pady=200)
-# mainFrame.place(relx=.5, rely=.8)
 if __name__ == "__main__":
     root.mainloop()
     
