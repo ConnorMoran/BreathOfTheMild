@@ -259,9 +259,6 @@ class functionFrame(tk.Frame):
     
     #2 complete buttons -----UF
     def server_protocol(self):
-        test = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test)
-        test.place(relx=0, rely = .1)
         
         test2 = tk.Button(self, text="characters in a given server", command=self.characters_in_given_server)
         self.currentButtons.append(test2)
@@ -291,59 +288,24 @@ class functionFrame(tk.Frame):
         
     #1 complete buttons -----UF
     def shop_protocol(self):
-        test = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test)
-        test.place(relx=0, rely = .1)
         
         inventory = tk.Button(self, text="display inventory", command=self.display_items_in_shop)
         self.currentButtons.append(inventory)
         inventory.place(relx=0, rely = .2)
-        
-        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test3)
-        test3.place(relx=0, rely = .3)
-                
+ 
     #0 complete buttons -----UF
     def NPC_quest_protocol(self):
-        test = tk.Button(self, text="npc quest option", command=self.testCommand)
-        self.currentButtons.append(test)
-        test.place(relx=.1, rely = .1)
-        
-        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test2)
-        test2.place(relx=0, rely = .2)
-        
-        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test3)
-        test3.place(relx=0, rely = .3)
+        print("no npc quest protocols")
         
     #1 complete button -----UF
     def player_character_protocol(self):
-        test = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test)
-        test.place(relx=0, rely = .1)
-        
-        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test2)
-        test2.place(relx=0, rely = .2)
-        
         inventory = tk.Button(self, text="character inventory", command=self.display_characters_items)
         self.currentButtons.append(inventory)
         inventory.place(relx=0, rely = .3)
         
     #0 complete buttons -----UF
     def item_protocol(self):
-        test = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test)
-        test.place(relx=0, rely = .1)
-        
-        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test2)
-        test2.place(relx=0, rely = .2)
-        
-        test3 = tk.Button(self, text="item option", command=self.testCommand)
-        self.currentButtons.append(test3)
-        test3.place(relx=.1, rely = .3)
+        print("no item protocols")
         
     #3 complete buttons -----GOOD
     def location_protocol(self):
@@ -359,7 +321,7 @@ class functionFrame(tk.Frame):
         self.currentButtons.append(chars)
         chars.place(relx=0, rely = .3)
     
-    #1 complete button -----UF
+    #2 complete button -----UF
     def NPC_dialogue_protocol(self):
         test = tk.Button(self, text="npc dialogue option", command=self.testCommand)
         self.currentButtons.append(test)
@@ -369,9 +331,6 @@ class functionFrame(tk.Frame):
         self.currentButtons.append(dialogue)
         dialogue.place(relx=0, rely = .2)
         
-        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test3)
-        test3.place(relx=0, rely = .3)
         
     #1 complete buttons -----UF
     def mob_protocol(self):
@@ -379,27 +338,10 @@ class functionFrame(tk.Frame):
         self.currentButtons.append(test)
         test.place(relx=0, rely = .1)
         
-        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test2)
-        test2.place(relx=0, rely = .2)
-        
-        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test3)
-        test3.place(relx=0, rely = .3)
         
     #0 complete buttons -----UF
     def NPC_protocol(self):
-        test = tk.Button(self, text="NPC option", command=self.testCommand)
-        self.currentButtons.append(test)
-        test.place(relx=0, rely = .1)
-        
-        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test2)
-        test2.place(relx=0, rely = .2)
-        
-        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test3)
-        test3.place(relx=0, rely = .3)
+        print("no NPC protocols")
         
     #END LEFT PANE BUTTON PROTOCOLS--------------------------------------------
         

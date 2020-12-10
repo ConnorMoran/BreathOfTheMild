@@ -18,10 +18,10 @@ class MainFrame(tk.Frame):
     def __init__(self, parent):
         self._connection = None
         tk.Frame.__init__(self, parent, bg="#666666", width=500, height=500)
+
         container = tk.Frame(self)
         container.place(relwidth = .98, relheight = .98, relx=.01, rely=.01)
-#         container.pack(expand=True)
-        
+        self._current_table = None
         self.frames = {}
         for F in (Index.IndexFrame, login.loginFrame, account.accountFrame, DUMMY, plogin.ploginFrame, functions.functionFrame, DatabaseEdit.DatabaseEditFrame, DatabaseSelection.DatabaseSelectionFrame):
             page_name = F.__name__
@@ -36,7 +36,10 @@ class MainFrame(tk.Frame):
         if (page_name == "DUMMY"):
             frame.check_connection()
         if page_name == "DatabaseEditFrame":
+            
             frame.create_table()
+        if page_name != "DatabaseEditFrame":
+           print(":D")
         if page_name == "DatabaseSelectionFrame":
             frame.create_buttons()
         frame.tkraise()
@@ -49,6 +52,7 @@ class MainFrame(tk.Frame):
     def get_current_frame(self):
         return self.current_frame
     def set_connection(self, connection):
+        self._connection = connection
         self._connection = connection
         print(self._connection)
     def get_connection(self):

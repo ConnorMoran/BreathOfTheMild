@@ -44,14 +44,6 @@ class loginFrame(tk.Frame):
         self.go_button.bind("<Return>", self.go_click)
         self.go_button.bind("<Leave>", self.go_exit)
         
-        #cancel button, takes you back to Index
-        c1 = Image.open("cancel.png")
-        c2 = c1.resize((240,38), Image.ANTIALIAS)
-        self.cancel_image = ImageTk.PhotoImage(c2)
-        self.cancel_button = Label(self, image=self.cancel_image, bg="#323232")
-        self.cancel_button.bind("<Enter>", self.c_enter)
-        self.cancel_button.bind("<Button>", self.cancel_click)
-        self.cancel_button.bind("<Leave>", self.c_exit)
 
         
         #image reference for mouse hover [login button]
@@ -83,28 +75,12 @@ class loginFrame(tk.Frame):
 
         except Error as e:
             self.wrong_label.place(relx=.5, rely=.41, anchor=CENTER)
-            
-    def cancel(self):
-        self.scene_change("IndexFrame")
         
     def go_enter(self, event):
-        print("entering!")
         self.go_button.config(image=self.go_pimage)
-        
-        #For testing purposes only, delete LATER
-        #also, how tf does this actually work? It throws an error and magically fills it :O
-        _skip = tk.Button(self, "skip", command=self.code_test_Skip_password())
-        _skip.place(relx=0, rely=1)
+
     def go_exit(self, event):
-        print("Exiting!")
         self.go_button.config(image=self.go_image)
-    def c_enter(self, event):
-        print("entering!")
-        self.cancel_button.config(image=self.c_pimage)
-    def c_exit(self, event):
-        print("Exiting!")
-        self.cancel_button.config(image=self.cancel_image)
-        
     def retype(self, event):
         self.wrong_label.place_forget()
 
@@ -113,8 +89,6 @@ class loginFrame(tk.Frame):
         
     def go_click(self, x):
         self.create_connection()
-    def cancel_click(self, x):
-        self.cancel()
     def scene_change(self, scene):
         self.controller.show_frame(scene)
         self.init_state()
@@ -125,7 +99,6 @@ class loginFrame(tk.Frame):
         self.wrong_label.place_forget()
         self.password.place(relx=.5, rely=.27, anchor=CENTER)
         self.go_button.place(relx=.5, rely=.6, anchor=CENTER)
-        self.cancel_button.place(relx=.5, rely=.93, anchor=CENTER)
         self.password.delete(0, END)
         
         

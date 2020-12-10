@@ -15,7 +15,10 @@ class DatabaseSelectionFrame(tk.Frame):
         self.controller = controller
         self.tables = []
         self.error = Label(self, text="")
-
+        
+    """
+     This is where all mySQL Commands are used
+    """
     def execute_read_query(self, connection, query):
         cursor = connection.cursor()
         result = None
@@ -26,7 +29,9 @@ class DatabaseSelectionFrame(tk.Frame):
         except Error as e:
             print(f"The error '{e}' occurred")
             self.error.config(text=f"The error '{e}' occurred")
-
+    """
+    Initialize button for each table that leads to the Database Edit screen.
+    """
     def create_buttons(self):
         if self.controller.get_connection() is not None:
 
@@ -38,7 +43,9 @@ class DatabaseSelectionFrame(tk.Frame):
             for i, name in enumerate(self.tables):
                 button = Button(self, text=name, command=partial(self.select_table, i))
                 button.place(relx=0.4, rely=i*0.07+0.05, anchor=CENTER)
-
+    """
+    Saves the table that was selected and changes to the Database Edit screen
+    """
     def select_table(self, num):
         self.controller.set_current_table(self.tables[num])
         self.controller.show_frame("DatabaseEditFrame")
