@@ -6,11 +6,11 @@ from tkinter import *
 from PIL import ImageTk, Image
 import functions
 
-class loginFrame(tk.Frame):
+class signupFrame(tk.Frame):
      
     global connection
     
-    #initialize login frame with parent frame and controller container. Allows MainFrame stacking
+    #initialize frame with parent frame and controller container. Allows MainFrame stacking
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="#323232")
         self.controller = controller
@@ -33,7 +33,7 @@ class loginFrame(tk.Frame):
         self.password = Entry(self)
         self.password.bind("<Key>", self.retype)
         self.password.config(show='*')
-        
+            
         #try to log-in button, takes you to [DatabaseSelection]
         go_1 = Image.open("go.png")
         go_2 = go_1.resize((320,50), Image.ANTIALIAS)
@@ -78,7 +78,9 @@ class loginFrame(tk.Frame):
                 database = "breathofthemild"
             )
             self.controller.set_connection(connection)
-            self.scene_change("IndexFrame")
+            self.scene_change("DatabaseSelectionFrame")
+            #delete later
+            startPage = "Shop"
             print (self.controller.get_current_frame())
 
         except Error as e:

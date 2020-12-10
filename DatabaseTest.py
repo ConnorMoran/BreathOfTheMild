@@ -3,6 +3,9 @@ import tkinter as tk
 import login
 import Index
 import functions
+import plogin
+import signup
+import account
 import DatabaseEdit
 import DatabaseSelection
 import PIL
@@ -21,14 +24,14 @@ class MainFrame(tk.Frame):
 #         container.pack(expand=True)
         
         self.frames = {}
-        for F in (Index.IndexFrame, login.loginFrame, DUMMY, functions.functionFrame, DatabaseEdit.DatabaseEditFrame, DatabaseSelection.DatabaseSelectionFrame):
+        for F in (Index.IndexFrame, login.loginFrame, signup.signupFrame, account.accountFrame, DUMMY, plogin.ploginFrame, functions.functionFrame, DatabaseEdit.DatabaseEditFrame, DatabaseSelection.DatabaseSelectionFrame):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
 
             self.frames[page_name] = frame
             frame.place(relwidth=1, relheight=1)
-        self.show_frame("IndexFrame")
-        self.current_frame = self.frames["IndexFrame"]
+        self.show_frame("loginFrame")
+        self.current_frame = self.frames["loginFrame"]
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         if (page_name == "DUMMY"):
@@ -40,6 +43,10 @@ class MainFrame(tk.Frame):
         frame.tkraise()
         self.current_frame = frame
         print(self.current_frame)
+    def show_account(self, username):
+        frame = self.frames["accountFrame"]
+        frame.tkraise()
+        frame.account_update(username)
     def get_current_frame(self):
         return self.current_frame
     def set_connection(self, connection):
@@ -56,7 +63,6 @@ class MainFrame(tk.Frame):
         return self.frames["functionFrame"]
         
 class DUMMY(tk.Frame):
-    #example: this is where password screen takes you
     def __init__(self, parent, controller):
         
         tk.Frame.__init__(self, parent)
@@ -77,8 +83,6 @@ root = tk.Tk()
 root.geometry("700x500+500+300")
 root.resizable(0, 0)
 root.title("Breath of the Mild")
-# root.wm_attributes("-transparentcolor",'#333333')
-# root.wm_attributes("-transparentcolor", 'grey')
 upperFrame = tk.Frame(root, background="#999999")
 
 logo = PIL.Image.open("logo.png")

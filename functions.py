@@ -60,6 +60,7 @@ class functionFrame(tk.Frame):
         elif self.page == self.page_list[9]:
             self.NPC_protocol()
         
+    #below are the many functions the server can perform from the functions Frame
     def helper(self, query):
             _msg = self.execute_read_query(self.controller.get_connection(), query)
             tempList = []

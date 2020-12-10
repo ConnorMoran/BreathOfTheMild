@@ -69,9 +69,9 @@ class IndexFrame(tk.Frame):
         self.Ago_button.config(image=self.Ago_image)
         
     def admin_click(self, e):
-        self.controller.show_frame("loginFrame")
+        self.controller.show_frame("DatabaseSelectionFrame")
     def player_click(self, e):
-        self.controller.show_frame("loginFrame")
+        self.controller.show_frame("ploginFrame")
         
     def init_state(self):
         self.Pgo_button.place(relx=.22, rely=.45)

@@ -5,23 +5,23 @@ from mysql.connector import Error
 from tkinter import *
 from PIL import ImageTk, Image
 import functions
-
-class loginFrame(tk.Frame):
+import tkinter.font as tkFont
+class ploginFrame(tk.Frame):
      
     global connection
     
-    #initialize login frame with parent frame and controller container. Allows MainFrame stacking
+    #initialize frame with parent frame and controller container. Allows MainFrame stacking
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="#323232")
         self.controller = controller
+        myStyle = tkFont.Font(family="Lucida Grande", size=20)
+        #username Label:
+        self.uLabel = Label(self, text="Username: ", font=myStyle)
         
-        #Admin Login Label
-        pl1 = Image.open("pwordLabel.png")
-        pl2 = pl1.resize((320,50), Image.ANTIALIAS)
-        self.pl = ImageTk.PhotoImage(pl2)
-        self.pLabel = Label(self, bg="#323232", image=self.pl)
-        self.pLabel.photo = self.pl
+        #password label
+        self.pLabel = Label(self, text="Password: ", font=myStyle)
         
+        self.signupl = Label(self, text="Dont have an account?", font=myStyle)      
         
         #create incorrect password label
         wl1 = Image.open("IP.png")
@@ -29,6 +29,14 @@ class loginFrame(tk.Frame):
         self.wrongLabel = ImageTk.PhotoImage(wl2)
         self.wrong_label = Label(self, bg="#323232", image=self.wrongLabel)
 
+        #text entry for typing username in
+        self.username = Entry(self)
+        self.username.bind("<Key>", self.retype)
+        
+        #text entry for typing username in
+        self.make = tk.Button(self, text="Make an Account!", command=self.makeA)
+        self.make.bind("<Key>", self.retype)
+        
         #text entry for typing password in
         self.password = Entry(self)
         self.password.bind("<Key>", self.retype)
@@ -36,7 +44,7 @@ class loginFrame(tk.Frame):
         
         #try to log-in button, takes you to [DatabaseSelection]
         go_1 = Image.open("go.png")
-        go_2 = go_1.resize((320,50), Image.ANTIALIAS)
+        go_2 = go_1.resize((240,38), Image.ANTIALIAS)
         self.go_image = ImageTk.PhotoImage(go_2)
         self.go_button = Label(self, image=self.go_image, bg="#323232")
         self.go_button.bind("<Enter>", self.go_enter)
@@ -52,11 +60,10 @@ class loginFrame(tk.Frame):
         self.cancel_button.bind("<Enter>", self.c_enter)
         self.cancel_button.bind("<Button>", self.cancel_click)
         self.cancel_button.bind("<Leave>", self.c_exit)
-
         
         #image reference for mouse hover [login button]
         go_p1 = Image.open("go_push.png")
-        go_p2 = go_p1.resize((320,50), Image.ANTIALIAS)
+        go_p2 = go_p1.resize((240,38), Image.ANTIALIAS)
         self.go_pimage = ImageTk.PhotoImage(go_p2)
         
         #image reference for mouse hover [Cancel button]
@@ -78,11 +85,12 @@ class loginFrame(tk.Frame):
                 database = "breathofthemild"
             )
             self.controller.set_connection(connection)
-            self.scene_change("IndexFrame")
+            self.scene_change("DatabaseSelectionFrame")
+            #delete later
             print (self.controller.get_current_frame())
 
         except Error as e:
-            self.wrong_label.place(relx=.5, rely=.41, anchor=CENTER)
+            self.wrong_label.place(relx=.40, rely=.62, anchor=CENTER)
             
     def cancel(self):
         self.scene_change("IndexFrame")
@@ -90,11 +98,6 @@ class loginFrame(tk.Frame):
     def go_enter(self, event):
         print("entering!")
         self.go_button.config(image=self.go_pimage)
-        
-        #For testing purposes only, delete LATER
-        #also, how tf does this actually work? It throws an error and magically fills it :O
-        _skip = tk.Button(self, "skip", command=self.code_test_Skip_password())
-        _skip.place(relx=0, rely=1)
     def go_exit(self, event):
         print("Exiting!")
         self.go_button.config(image=self.go_image)
@@ -112,23 +115,55 @@ class loginFrame(tk.Frame):
         return self.frame
         
     def go_click(self, x):
-        self.create_connection()
+        
+        users = self.execute_read_query(self.controller.get_connection(), "SELECT accountName FROM PlayerAccount WHERE accountName='" + self.username.get() + "';")
+        if len(users) == 0:
+            print("NO USERNAME MATCH")
+        else:
+            print("USERNAME MATCH")
+            password = self.execute_read_query(self.controller.get_connection(), "SELECT Password FROM PlayerAccount WHERE accountName='" + self.username.get() + "';")
+            if len(password) ==0:
+                print("Invalid Password")
+            else:
+                print("PASSWORD MATCH")
+                self.controller.show_account(self.username.get())
+                self.init_state()
+    def execute_read_query(self, connection, query):
+        cursor = connection.cursor()
+        result = None
+        try:
+            cursor.execute(query)
+            result = cursor.fetchall()
+            return result
+        except Error as e:
+            print(f"The error '{e}' occurred")
+            
     def cancel_click(self, x):
         self.cancel()
+    #change scene to sign up page
+    def makeA(self):
+        self.scene_change("signupFrame")
+    #general scene changer. sets frame to its initial state and changes scene in MainFrame
     def scene_change(self, scene):
         self.controller.show_frame(scene)
         self.init_state()
     
     def init_state(self):
-        self.pLabel.place(relx=.5, rely=.08, anchor=CENTER)
-        self.wrong_label.place(relx=.40, rely=.22, anchor=CENTER)
+        self.wrong_label.place(relx=.40, rely=.62, anchor=CENTER)
         self.wrong_label.place_forget()
-        self.password.place(relx=.5, rely=.27, anchor=CENTER)
-        self.go_button.place(relx=.5, rely=.6, anchor=CENTER)
-        self.cancel_button.place(relx=.5, rely=.93, anchor=CENTER)
+        
+        self.uLabel.place(relx=.5, rely=.08, anchor=CENTER)
+        self.username.place(relx=.5, rely=.14, anchor=CENTER)
+        
+        self.pLabel.place(relx=.5, rely=.26, anchor=CENTER)
+        self.password.place(relx=.5, rely=.32, anchor=CENTER)
+        
+        self.go_button.place(relx=.7, rely=.90, anchor=CENTER)
+        self.cancel_button.place(relx=.2, rely=.90, anchor=CENTER)
         self.password.delete(0, END)
+        self.signupl.place(relx=.5, rely=.44, anchor=CENTER)
+        self.make.place(relx=.5, rely=.54, anchor=CENTER)
         
+        self.username.delete(0, END)
         
-    def code_test_Skip_password(self):
-        self.password.insert(0, "x1!slydog39$^")
                 
