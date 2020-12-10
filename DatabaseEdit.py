@@ -18,8 +18,7 @@ class DatabaseEditFrame(tk.Frame):
         self.extra_buttons = []
 #         self.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
         self.error = Label(self, text="")
-        back_button = Button(self, text="back..", command=lambda: self.controller.show_frame("DatabaseSelectionFrame"))
-        back_button.grid(row=10, column=0)
+
     def execute_read_query(self, connection, query):
         cursor = connection.cursor()
         result = None

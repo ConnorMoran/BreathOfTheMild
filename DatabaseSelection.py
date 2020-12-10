@@ -10,9 +10,10 @@ class DatabaseSelectionFrame(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="#323232")
+        back = tk.Button(self, text="Back", command=self.back)
+        back.place(relx=.02, rely=.95)
         self.controller = controller
         self.tables = []
-#         self.place(relwidth=0.8, relheight=0.8, relx=0.1, rely=0.1)
         self.error = Label(self, text="")
 
     def execute_read_query(self, connection, query):
@@ -41,3 +42,6 @@ class DatabaseSelectionFrame(tk.Frame):
     def select_table(self, num):
         self.controller.set_current_table(self.tables[num])
         self.controller.show_frame("DatabaseEditFrame")
+    
+    def back(self):
+        self.controller.show_frame("IndexFrame")

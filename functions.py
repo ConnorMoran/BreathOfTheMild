@@ -121,16 +121,6 @@ class functionFrame(tk.Frame):
         except Error as e:
             messagebox.showerror("Error", "Invalid location ID")
             self.mobs_in_location()
-            
-    #error
-    def shop_items(self):
-        _msg = self.execute_read_query(self.controller.get_connection(), "SELECT Shop, Shopid From Shops Where shopid= 001")
-        tempList = []
-        for m in _msg:
-            tempList.append(m)
-        for mn in tempList:
-            self.add_text(mn[0] + mn[1]) 
-        self.add_text("------------------------------------------------------") 
         
     def npc_dialogue(self):
         try:
@@ -215,6 +205,54 @@ class functionFrame(tk.Frame):
         self.add_text("test")
         self.add_text("------------------------------------------------------") 
         
+    def mob_count_location(self):
+        try:
+            input = simpledialog.askstring("Location Input", "type a location ID")
+            if input==None:
+                return
+            query = "Select count(*) from mob Where locationID =" + input + ";"
+            self.add_text("_____Total Mobs in location:  " + str(input))
+            for mn in self.helper(query):
+                self.add_text(" -Count: " + str(mn[0]))
+            self.add_text("------------------------------------------------------")
+        except ValueError:
+            messagebox.showerror("404", "no data matches your query..")
+            self.mob_count_location() 
+        except Error as e:
+            messagebox.showerror("Error", "Invalid LocationID")
+            self.mob_count_location()
+            
+    def display_all_accounts(self):
+        try:
+            query = "Select accountname, email, password From playeraccount;"
+            self.add_text("_____All Player Accounts:  ")
+            for mn in self.helper(query):
+                self.add_text(" -Account: " + str(mn[0]) + "\n email:  " + str(mn[1]) + "\n password:  " + str(mn[2]))
+            self.add_text("------------------------------------------------------")
+        except ValueError:
+            messagebox.showerror("404", "no data matches your query..")
+            self.display_all_accounts() 
+        except Error as e:
+            messagebox.showerror("Error", "Invalid LocationID")
+            self.display_all_accounts()
+            
+    def display_items_in_shop(self):
+        try:
+            input = simpledialog.askstring("Shop Input", "type a Shop ID")
+            if input==None:
+                return
+            query = "Select itemid, itemName From item Where shopID=" + input + ";"
+            self.add_text("_____All Items in Shop: " + str(input))
+            for mn in self.helper(query):
+                self.add_text(" -Item ID: " + str(mn[0]) + "\n Name:  " + str(mn[1]))
+            self.add_text("------------------------------------------------------")
+        except ValueError:
+            messagebox.showerror("404", "no data matches your query..")
+            self.display_items_in_shop() 
+        except Error as e:
+            messagebox.showerror("Error", "Invalid LocationID")
+            self.display_items_in_shop()
+        
     #below are the protocols for placing and setting the buttons and their behavior on
     #the left pane of the function screen. One protocol is called depending on the 
     #what the current Table is.
@@ -235,21 +273,11 @@ class functionFrame(tk.Frame):
         
     #0 complete buttons -----UF
     def dwells_in_protocol(self):
-        test = tk.Button(self, text="dwells option", command=self.testCommand)
-        self.currentButtons.append(test)
-        test.place(relx=0, rely = .1)
-        
-        test2 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test2)
-        test2.place(relx=0, rely = .2)
-        
-        test3 = tk.Button(self, text="place Holder", command=self.testCommand)
-        self.currentButtons.append(test3)
-        test3.place(relx=0, rely = .3)
+        print("no protocols for DwellsIn")
     
-    #1 complete button -----UF
+    #2 complete button -----UF
     def player_account_protocol(self):
-        test = tk.Button(self, text="place Holder", command=self.testCommand)
+        test = tk.Button(self, text="Display All Accounts", command=self.display_all_accounts)
         self.currentButtons.append(test)
         test.place(relx=0, rely = .1)
         
@@ -261,13 +289,13 @@ class functionFrame(tk.Frame):
         self.currentButtons.append(test3)
         test3.place(relx=0, rely = .3)
         
-    #0 complete buttons -----UF
+    #1 complete buttons -----UF
     def shop_protocol(self):
         test = tk.Button(self, text="place Holder", command=self.testCommand)
         self.currentButtons.append(test)
         test.place(relx=0, rely = .1)
         
-        inventory = tk.Button(self, text="display inventory", command=self.shop_items)
+        inventory = tk.Button(self, text="display inventory", command=self.display_items_in_shop)
         self.currentButtons.append(inventory)
         inventory.place(relx=0, rely = .2)
         
@@ -345,9 +373,9 @@ class functionFrame(tk.Frame):
         self.currentButtons.append(test3)
         test3.place(relx=0, rely = .3)
         
-    #0 complete buttons -----UF
+    #1 complete buttons -----UF
     def mob_protocol(self):
-        test = tk.Button(self, text="mob option", command=self.testCommand)
+        test = tk.Button(self, text="Total Mobs", command=self.mob_count_location)
         self.currentButtons.append(test)
         test.place(relx=0, rely = .1)
         

@@ -4,7 +4,6 @@ import login
 import Index
 import functions
 import plogin
-import signup
 import account
 import DatabaseEdit
 import DatabaseSelection
@@ -24,7 +23,7 @@ class MainFrame(tk.Frame):
 #         container.pack(expand=True)
         
         self.frames = {}
-        for F in (Index.IndexFrame, login.loginFrame, signup.signupFrame, account.accountFrame, DUMMY, plogin.ploginFrame, functions.functionFrame, DatabaseEdit.DatabaseEditFrame, DatabaseSelection.DatabaseSelectionFrame):
+        for F in (Index.IndexFrame, login.loginFrame, account.accountFrame, DUMMY, plogin.ploginFrame, functions.functionFrame, DatabaseEdit.DatabaseEditFrame, DatabaseSelection.DatabaseSelectionFrame):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
 
@@ -99,22 +98,3 @@ mainFrame = MainFrame(root)
 mainFrame.place(relwidth = 1, relheight = .7, relx=0, rely=.3)
 if __name__ == "__main__":
     root.mainloop()
-    
-    
-    
-    
-#     def execute_read_query(connection, query):
-#         cursor = connection.cursor()
-#         result = None
-#         try:
-#             cursor.execute(query)
-#             result = cursor.fetchall()
-#             return result
-#         except Error as e:
-#             print(f"The error '{e}' occurred")
-
-#         menu_options = ["Insert", "Update", "Delete", "Display"]
-#         selected = StringVar(frame)
-#         selected.set(menu_options[0])
-#         menu = OptionMenu(frame, selected, *menu_options, command=done)
-#         menu.grid(row=0, column=0, pady=10)
