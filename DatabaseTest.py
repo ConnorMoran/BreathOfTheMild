@@ -17,8 +17,9 @@ class MainFrame(tk.Frame):
    
     def __init__(self, parent):
         self._connection = None
+        self.p = parent
         tk.Frame.__init__(self, parent, bg="#666666", width=500, height=500)
-
+        
         container = tk.Frame(self)
         container.place(relwidth = .98, relheight = .98, relx=.01, rely=.01)
         self._current_table = None
@@ -36,12 +37,14 @@ class MainFrame(tk.Frame):
         if (page_name == "DUMMY"):
             frame.check_connection()
         if page_name == "DatabaseEditFrame":
-            
+            self.p.geometry("1200x700")
             frame.create_table()
         if page_name != "DatabaseEditFrame":
-           print(":D")
+            self.p.geometry("700x500")
+            print(":D")
         if page_name == "DatabaseSelectionFrame":
             frame.create_buttons()
+            
         frame.tkraise()
         self.current_frame = frame
         print(self.current_frame)

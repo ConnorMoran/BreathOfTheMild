@@ -42,7 +42,7 @@ class DatabaseSelectionFrame(tk.Frame):
 
             for i, name in enumerate(self.tables):
                 button = Button(self, text=name, command=partial(self.select_table, i))
-                button.place(relx=0.4, rely=i*0.07+0.05, anchor=CENTER)
+                button.place(relx=0.5, rely=i*0.07+0.05, anchor=CENTER)
     """
     Saves the table that was selected and changes to the Database Edit screen
     """

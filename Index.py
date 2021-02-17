@@ -5,7 +5,6 @@ from mysql.connector import Error
 from tkinter import *
 from PIL import ImageTk, Image
 
-
 class IndexFrame(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg="#323232")
@@ -39,7 +38,6 @@ class IndexFrame(tk.Frame):
         self.Ago_button.bind("<Enter>", self.admin_enter)
         self.Ago_button.bind("<Button>", self.admin_click)
         self.Ago_button.bind("<Leave>", self.admin_exit)
-        
         
         
         #image reference for mouse hover [player button]
